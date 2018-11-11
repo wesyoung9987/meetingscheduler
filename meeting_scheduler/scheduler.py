@@ -44,19 +44,16 @@ def find_availability(people, office_hours, lunch):
     lunch_start = _time_to_number(lunch['startTime'])
     lunch_end = _time_to_number(lunch['endTime'])
 
+    if lunch_start > lunch_end:
+        raise Exception('Lunch end time must be later than start time')
+
     # Create a store for all times and people available at those times
     schedule = {}
     for person in people:
         _individual_availability(person, office_hours, lunch_start, lunch_end, schedule)
 
-    result = {}
-
     # Filter out any times that do not have at least three available people
-    for key in schedule:
-        if len(schedule[key]) > 2:
-            result[key] = schedule[key]
-
-    return result
+    return {key: value for (key, value) in schedule.items() if len(value) > 2}
 
 
 def _check_lunch_hours(time, lunch_start, lunch_end):
@@ -76,6 +73,9 @@ def _individual_availability(person, office_hours, lunch_start, lunch_end, sched
 
     time = _time_to_number(office_hours['startTime'])
     office_end = _time_to_number(office_hours['endTime'])
+
+    if time > office_end:
+        raise Exception('Office hours end time must be later than start time')
 
     # Go through the office hours and check against the persons schedule
     while time < office_end:

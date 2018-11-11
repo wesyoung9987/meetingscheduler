@@ -200,7 +200,7 @@ class TestMeetingScheduler(unittest.TestCase):
             'Please provide a list of meeting times for each person' in context.exception)
 
     def test_find_availability_invalid_time(self):
-        """Should raise an exception of any of the input times are not formatted correctly"""
+        """Should raise an exception if any of the input times are not formatted correctly"""
 
         with open('tests/testinput.json') as f:
             test_input = json.load(f)
@@ -215,6 +215,40 @@ class TestMeetingScheduler(unittest.TestCase):
 
         self.assertTrue(
             'Times must be formatted as hh:mm:ss' in context.exception)
+
+    def test_find_availability_lunch_end_before_start(self):
+        """Should raise an exception if lunch end time is before start time"""
+
+        with open('tests/testinput.json') as f:
+            test_input = json.load(f)
+            test_input['lunch'] = {
+                'startTime': '13:00:00',
+                'endTime': '12:00:00'
+            }
+
+        with self.assertRaises(Exception) as context:
+            s.find_availability(
+                test_input['people'], test_input['officeHours'], test_input['lunch'])
+
+        self.assertTrue(
+            'Lunch end time must be later than start time' in context.exception)
+
+    def test_find_availability_hours_end_before_start(self):
+        """Should raise an exception if office hours end time is before start time"""
+
+        with open('tests/testinput.json') as f:
+            test_input = json.load(f)
+            test_input['officeHours'] = {
+                'startTime': '12:00:00',
+                'endTime': '08:00:00'
+            }
+
+        with self.assertRaises(Exception) as context:
+            s.find_availability(
+                test_input['people'], test_input['officeHours'], test_input['lunch'])
+
+        self.assertTrue(
+            'Office hours end time must be later than start time' in context.exception)
 
 
 if __name__ == '__main__':
