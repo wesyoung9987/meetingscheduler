@@ -6,3 +6,18 @@ __pycache__/
 .vscode
 
 output.json
+
+# Distribution / packaging
+.Python
+env/
+venv/
+*.egg
+*.egg-info/
+?eggs/
+dist/
+build/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
