@@ -2,7 +2,7 @@
 
 A Python library for team meeting scheduling.
 
-#### Testing locally
+### Testing locally
 
 Clone the repository:
 
