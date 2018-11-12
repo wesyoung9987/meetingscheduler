@@ -96,6 +96,8 @@ def _time_to_number(time_string):
     """Change time string to float for easier comparison
     example -> '08:30:00' becomes 8.5
     example -> '08:00:00' becomes 8.0
+    example -> '11:30:00' becomes 11.5
+    example -> '11:00:00' becomes 11.0
     """
 
     time_list = time_string.split(':')
@@ -115,8 +117,10 @@ def _time_to_number(time_string):
 
 def _format_time(str):
     """Change string version of float back to original time format
-    example -> '8.5' becomes '08:30:00' 
-    example -> '8.0' becomes '08:00:00' 
+    example -> '8.5' becomes '08:30:00'
+    example -> '8.0' becomes '08:00:00'
+    example -> '11.5' becomes '11:30:00'
+    example -> '11.0' becomes '11:00:00'
     """
 
     time_list = str.split('.')
