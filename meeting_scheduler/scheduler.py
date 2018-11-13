@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 def find_availability(people, office_hours, lunch):
     """Takes people, office hours and lunch times formatted as
     people -> [
@@ -41,8 +43,8 @@ def find_availability(people, office_hours, lunch):
     if (type(people) is not list) or (len(people) == 0):
         raise Exception('Please provide a list of people')
 
-    lunch_start = _time_to_number(lunch['startTime'])
-    lunch_end = _time_to_number(lunch['endTime'])
+    lunch_start = datetime.strptime(lunch['startTime'], '%H:%M:%S')
+    lunch_end = datetime.strptime(lunch['endTime'], '%H:%M:%S')
 
     if lunch_start > lunch_end:
         raise Exception('Lunch end time must be later than start time')
@@ -71,15 +73,15 @@ def _individual_availability(person, office_hours, lunch_start, lunch_end, sched
     if ('meetingTimes' not in person):
         raise Exception('Please provide a list of meeting times for each person')
 
-    time = _time_to_number(office_hours['startTime'])
-    office_end = _time_to_number(office_hours['endTime'])
+    time = datetime.strptime(office_hours['startTime'], '%H:%M:%S')
+    office_end = datetime.strptime(office_hours['endTime'], '%H:%M:%S')
 
     if time > office_end:
         raise Exception('Office hours end time must be later than start time')
 
     # Go through the office hours and check against the persons schedule
     while time < office_end:
-        time_key = _format_time(str(time))
+        time_key = time.strftime('%H:%M:%S')
 
         # check if the person has a meeting during this time or if it is during lunch hours
         if time_key not in person['meetingTimes'] and _check_lunch_hours(time, lunch_start, lunch_end):
@@ -89,43 +91,4 @@ def _individual_availability(person, office_hours, lunch_start, lunch_end, sched
             else:
                 schedule[time_key] = [person['name']]
 
-        time = time + 0.5
-
-
-def _time_to_number(time_string):
-    """Change time string to float for easier comparison
-    example -> '08:30:00' becomes 8.5
-    example -> '08:00:00' becomes 8.0
-    example -> '11:30:00' becomes 11.5
-    example -> '11:00:00' becomes 11.0
-    """
-
-    time_list = time_string.split(':')
-
-    # Check time format
-    if len(time_list) != 3:
-        raise Exception('Times must be formatted as hh:mm:ss')
-
-    time = float(time_list[0])
-    minute = float(time_list[1])
-
-    if minute != 0:
-        time = time + 0.5
-
-    return time
-
-
-def _format_time(str):
-    """Change string version of float back to original time format
-    example -> '8.5' becomes '08:30:00'
-    example -> '8.0' becomes '08:00:00'
-    example -> '11.5' becomes '11:30:00'
-    example -> '11.0' becomes '11:00:00'
-    """
-
-    time_list = str.split('.')
-
-    if len(time_list[0]) == 1:
-        time_list[0] = '0' + time_list[0]
-
-    return (time_list[0] + ':30:00') if (int(time_list[1]) > 0) else (time_list[0] + ':00:00')
+        time = time + timedelta(minutes=30)

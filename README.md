@@ -165,15 +165,15 @@ print(availability)
 #     "Jairo",
 #     "Sonya"
 #   ],
-#   "15:30:00": [
-#     "Kyle",
-#     "Alex",
-#     "Jairo"
-#   ],
 #   "15:00:00": [
 #     "Kyle",
 #     "Jairo",
 #     "Sonya"
+#   ],
+#   "15:30:00": [
+#     "Kyle",
+#     "Alex",
+#     "Jairo"
 #   ],
 #   "16:00:00": [
 #     "Kyle",

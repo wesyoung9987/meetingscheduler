@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="meeting_scheduler",
-    version="0.0.3",
+    version="0.0.4",
     author="Wes Young",
     author_email="wes.young14@gmail.com",
     description="A meeting scheduler package",

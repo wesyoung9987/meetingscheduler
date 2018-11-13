@@ -214,7 +214,7 @@ class TestMeetingScheduler(unittest.TestCase):
                 test_input['people'], test_input['officeHours'], test_input['lunch'])
 
         self.assertTrue(
-            'Times must be formatted as hh:mm:ss' in context.exception)
+            "time data '17' does not match format '%H:%M:%S'" in context.exception)
 
     def test_find_availability_lunch_end_before_start(self):
         """Should raise an exception if lunch end time is before start time"""
