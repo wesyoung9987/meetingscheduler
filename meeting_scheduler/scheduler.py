@@ -1,4 +1,4 @@
-def find_availability(people, office_hours, lunch):
+def find_availability(people, office_hours, lunch, desired_individuals = 3):
     """Takes people, office hours and lunch times formatted as
     people -> [
       {
@@ -41,6 +41,12 @@ def find_availability(people, office_hours, lunch):
     if (type(people) is not list) or (len(people) == 0):
         raise Exception('Please provide a list of people')
 
+    if (type(desired_individuals) is not int):
+        raise Exception('Desired number of individuals should be an integer')
+
+    if (desired_individuals < 1):
+        raise Exception('Desired number of individuals must be at least 1')
+
     lunch_start = _time_to_number(lunch['startTime'])
     lunch_end = _time_to_number(lunch['endTime'])
 
@@ -53,7 +59,7 @@ def find_availability(people, office_hours, lunch):
         _individual_availability(person, office_hours, lunch_start, lunch_end, schedule)
 
     # Filter out any times that do not have at least three available people
-    return {key: value for (key, value) in schedule.items() if len(value) > 2}
+    return {key: value for (key, value) in schedule.items() if len(value) >= desired_individuals}
 
 
 def _check_lunch_hours(time, lunch_start, lunch_end):

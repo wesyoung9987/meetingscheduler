@@ -250,6 +250,54 @@ class TestMeetingScheduler(unittest.TestCase):
         self.assertTrue(
             'Office hours end time must be later than start time' in context.exception)
 
+    def test_find_availability_desired_individuals(self):
+        """Should take an optional number of individuals"""
+
+        with open('tests/testinput.json') as f:
+            test_input = json.load(f)
+
+        with open('tests/testoutput.json') as f:
+            test_output = json.load(f)
+
+        result = s.find_availability(test_input['people'], test_input['officeHours'], test_input['lunch'])
+
+        self.assertEquals(result, test_output)
+
+    def test_find_availability_desired_individuals_type(self):
+        """Should raise an exception if provided number of individuals is not an integer"""
+
+        with open('tests/testinput.json') as f:
+            test_input = json.load(f)
+
+        with self.assertRaises(Exception) as context:
+            s.find_availability(test_input['people'], test_input['officeHours'], test_input['lunch'], 'test')
+
+        self.assertTrue('Desired number of individuals should be an integer' in context.exception)
+
+    def test_find_availability_desired_individuals_min_number(self):
+        """Should raise an exception if provided number of individuals is less than 1"""
+
+        with open('tests/testinput.json') as f:
+            test_input = json.load(f)
+
+        with self.assertRaises(Exception) as context:
+            s.find_availability(test_input['people'], test_input['officeHours'], test_input['lunch'], 0)
+
+        self.assertTrue('Desired number of individuals must be at least 1' in context.exception)
+
+    def test_find_availability_desired_individuals_alt_number(self):
+        """Should return the correct output for desired individuals is something other than default"""
+
+        with open('tests/testinput.json') as f:
+            test_input = json.load(f)
+
+        with open('tests/testoutputminfour.json') as f:
+            test_output = json.load(f)
+
+        result = s.find_availability(test_input['people'], test_input['officeHours'], test_input['lunch'], 4)
+
+        self.assertEqual(test_output, result)
+
 
 if __name__ == '__main__':
     unittest.main()
